@@ -2,6 +2,7 @@ var board;
 var score = 0;
 var rows = 4;
 var columns = 4;
+let hasWon = false
 
 window.onload = function() {
     setGame();
@@ -127,6 +128,10 @@ document.addEventListener("keyup", (e) => { //e is event
     }
     // Update Score
     document.getElementById("score").innerText = score;
+
+    // Check for win condition
+    checkWin();
+
 })
 
 function filterZero(row) {
@@ -234,4 +239,48 @@ function slideDown() {
             updateTile(tile,num)
         }
     }
+}
+
+function checkWin() {
+    if (hasWon) return;
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            if (board[r][c] == 2048) {
+                // Display the pop-up
+                setTimeout(() => {
+                    if (confirm("You won! Continue playing?")) {
+                        // Continue playing (do nothing)
+                        hasWon = true
+                    } else {
+                        // Reset the game
+                        resetGame();
+                    }
+                }, 100); // Small delay to ensure DOM updates
+                return;
+            }
+        }
+    }
+}
+
+function resetGame() {
+    score = 0;
+    board = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ];
+    document.getElementById("score").innerText = score;
+
+    // Clear the board visually
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            let tile = document.getElementById(r.toString() + "-" + c.toString());
+            updateTile(tile, 0);
+        }
+    }
+
+    // Add two starting tiles
+    setTwoFour();
+    setTwoFour();
 }
