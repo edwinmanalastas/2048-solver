@@ -4,9 +4,10 @@ body {
     background-color: #faf8ef;
 }
 
+/* header */
 hr {
-    width: 500px;
-    color: #ac957f;
+    border-top: 1px solid #ac957f; /* Color of the horizontal line */
+    width: 400px;
 }
 
 .header {
@@ -25,6 +26,8 @@ hr {
     color: #776e65;
 }
 
+/* score */
+
 .score-box {
     font-weight: bold;
     display: inline-block;
@@ -38,12 +41,13 @@ hr {
     margin-bottom: 20px;
     margin-right: 8rem;
   }
-
   
   .score-box .score {
     font-size: 24px; /* Larger font for the score value */
     font-weight: bold; /* Make the score value bold */
   }
+
+  /* auto-solve button */
 
   .auto-button {
     background-color: #8f7a66; 
@@ -61,8 +65,7 @@ hr {
     background-color: #ac957f; /* Darker background on hover */
   }
   
-
-
+/* board */
 #board {
     width: 400px;
     height: 400px;
@@ -157,4 +160,26 @@ hr {
 .x8192 {
     background-color: #ff2020;
     color: white;
+}
+
+/* instructions */
+
+.instructions {
+    width: 400px;
+    margin: 20px auto; /* Center the instructions below the board */
+    text-align: center;
+    color: #776e65; /* Text color */
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.instructions p {
+    margin: 10px 0; /* Space between paragraphs */
+}
+
+.instructions hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #ac957f; /* Color of the horizontal line */
+    margin: 10px 0; /* Space around the horizontal line */
 }
