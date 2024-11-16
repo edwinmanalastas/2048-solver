@@ -3,17 +3,26 @@
     <head>
         <meta charset = "UTF-8">
         <meta name = "viewport" content="width=device-width", initial-scale: 1.0">
-        <title>2048</title>
+        <title>2048 + Solver</title>
         <link rel="stylesheet" href="2048.css">
         <script src="2048.js"></script>
     </head>
-
-    <body>
-        <h1>2048</h1>
-        <hr>
-        <h2>Score: <span id="score">0</span></h2>
-        <div id="board">
-            <!-- <div class = "tile x2">2</div> -->
+<body>
+    <div class="header">
+        <div class="header-title">
+            <h1>2048 + Solver</h1>
+            <p>Join the numbers and get to the <strong>2048</strong> tile!</p>
+            <hr>
+        </div>  
+        </div class = "header-score">
+            <div class="score-box">
+                <span class="label">SCORE:</span>
+                <span id="score">0</span>
+            </div>
+            <button class="auto-button">Auto-solve</button>
         </div>
-    </body>
+    <div id="board">
+        <!-- <div class = "tile x2">2</div> -->
+    </div>
+</body>
 </html>

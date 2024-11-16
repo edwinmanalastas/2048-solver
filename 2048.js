@@ -8,19 +8,20 @@ window.onload = function() {
 }
 
 function setGame() {
-    // board = [
-    //     [0,0,0,0],
-    //     [0,0,0,0],
-    //     [0,0,0,0],
-    //     [0,0,0,0]
-    // ]
-
     board = [
-        [2,2,2,2],
-        [2,2,2,2],
-        [4,4,8,8],
-        [4,4,8,8]
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
     ]
+
+    // Example Board
+    // board = [
+    //     [2,2,2,2],
+    //     [2,2,2,2],
+    //     [4,4,8,8],
+    //     [4,4,8,8]
+    // ]
 
 
     for (let r = 0; r < rows; r++) {
@@ -33,6 +34,52 @@ function setGame() {
             updateTile(tile, num);
             // add to our board
             document.getElementById("board").append(tile);
+        }
+    }
+
+    setTwoFour();
+    setTwoFour();
+}
+
+// Return false if board is full
+function hasEmptyTile() {
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            if (board[r][c] == 0) {
+                return true
+            }
+        }
+    }
+    return false
+}
+// Implement Random Game (without example board)
+// everytime we move tiles up,down,left,right.
+// if theres empty open tile, we call this function
+function setTwoFour() {
+    // see if board if full
+    if (!hasEmptyTile()) {
+        return;
+    }
+
+    let found = false;
+    // get 2 random indices from row/column. and check if empty
+    // if so, place 2 there.
+    while (!found) {
+        // random r, c
+        let r = Math.floor(Math.random() * rows); // (0-1 * 4) -> (0.15,3.24) -> (0,3)
+        let c = Math.floor(Math.random() * columns);
+
+        // if empty
+        if (board[r][c] == 0) {
+            // Determine whether to place a 2 or a 4 (90% chance for 2, 10% for 4)
+            let num = Math.random() < 0.9 ? 2 : 4; // 90% chance for 2
+            board[r][c] = num;
+
+            // Update the HTML
+            let tile = document.getElementById(r.toString() + "-" + c.toString());
+            tile.innerText = num.toString();
+            tile.classList.add("x" + num.toString());
+            found = true;
         }
     }
 }
@@ -64,16 +111,22 @@ function updateTile(tile, num) {
 document.addEventListener("keyup", (e) => { //e is event
     if (e.code == "ArrowLeft") {
         slideLeft();
+        setTwoFour();
     }
     else if (e.code == "ArrowRight") {
         slideRight();
+        setTwoFour();
     }
     else if (e.code == "ArrowUp") {
         slideUp();
+        setTwoFour();
     }
     else if (e.code == "ArrowDown") {
         slideDown();
+        setTwoFour();
     }
+    // Update Score
+    document.getElementById("score").innerText = score;
 })
 
 function filterZero(row) {

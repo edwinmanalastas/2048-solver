@@ -1,11 +1,67 @@
 body {
-    font-family: Arila, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    background-color: #faf8ef;
 }
 
 hr {
     width: 500px;
+    color: #ac957f;
 }
+
+.header {
+    padding-top: 50px;
+}
+
+.header-title h1 {
+    font-size: 48px;
+    margin: 0;
+    color: #776e65;
+}
+
+.header-title p {
+    font-size: 16px;
+    margin: 5px 0 0 0;
+    color: #776e65;
+}
+
+.score-box {
+    font-weight: bold;
+    display: inline-block;
+    background-color: #8f7a66; 
+    color: white;
+    text-align: center; 
+    padding: 10px 20px; 
+    border-radius: 8px; /* Rounded corners */
+    min-width: 100px; 
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-right: 8rem;
+  }
+
+  
+  .score-box .score {
+    font-size: 24px; /* Larger font for the score value */
+    font-weight: bold; /* Make the score value bold */
+  }
+
+  .auto-button {
+    background-color: #8f7a66; 
+    color: white; 
+    font-size: 16px; 
+    font-weight: bold; 
+    text-align: center; 
+    padding: 10px 20px;
+    border: none; 
+    border-radius: 8px;
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  .auto-button:hover {
+    background-color: #ac957f; /* Darker background on hover */
+  }
+  
+
 
 #board {
     width: 400px;
