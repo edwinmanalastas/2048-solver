@@ -8,12 +8,20 @@ window.onload = function() {
 }
 
 function setGame() {
+    // board = [
+    //     [0,0,0,0],
+    //     [0,0,0,0],
+    //     [0,0,0,0],
+    //     [0,0,0,0]
+    // ]
+
     board = [
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0]
+        [2,2,2,2],
+        [2,2,2,2],
+        [4,4,8,8],
+        [4,4,8,8]
     ]
+
 
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
@@ -27,7 +35,7 @@ function setGame() {
             document.getElementById("board").append(tile);
         }
     }
-}i
+}
 
 function updateTile(tile, num) {
     // clear the tile and classList "tile x2 x4 x8"
@@ -37,7 +45,7 @@ function updateTile(tile, num) {
     tile.classList.add("tile");
 
     if (num > 0) {
-        tile.innerText = num;
+        tile.innerText = num.toString();
         if (num <= 4096) {
             // add x2,4,8,..4096
             tile.classList.add("x"+num.toString());
@@ -46,3 +54,84 @@ function updateTile(tile, num) {
         }
     }
 }
+
+// Move arrow keys
+// Implementation
+// We first clear zeroes, merge, clear zeroes again, put zeroes back
+// [2,2,2,0] -> [2,2,2] -> [4,0,2] -> [4,2] -> [4,2,0,0]
+
+// When you type something and let go (keyup)
+document.addEventListener("keyup", (e) => { //e is event
+    if (e.code == "ArrowLeft") {
+        slideLeft();
+    }
+    else if (e.code == "ArrowRight") {
+        slideRight();
+    }
+})
+
+function filterZero(row) {
+    // create a new array like origina without zeroes
+    // has to follow the conditions (take all nums except 0)
+    return row.filter(num => num != 0);
+}
+
+function slide(row) {
+    // [0,2,2,2] example
+    row = filterZero(row); // get rid of zeroes -> [2,2,2]
+
+    //slide
+    for (let i=0; i < row.length-1; i++) { // -1 to not go out of bounds
+        //check every 2
+        if (row[i] == row[i+1]) { // if row equal to 1 ahead
+            row[i] *= 2; // double it
+            row[i+1] = 0; // second one becomes 0
+            score += row[i]; // increment score by doubled value
+        } // [2,2,2] -> [4,0 ,2]
+    }
+    // we want to filter out zero again. [4,0,2] -> [4,2]
+    row = filterZero(row); 
+
+    // add zeroes back
+    while (row.length < columns) { // while row != 4
+        row.push(0);
+    } // [4,2] -> [4,2,0,0]
+    return row;
+}
+
+// iterate through each row
+function slideLeft() {
+    for (let r=0; r < rows; r++) {
+        let row = board[r];
+        // call slide function, modifies array
+        row = slide(row);
+        // assign updated row back to that specific row
+        board[r] = row;
+
+        // update our HTML
+        for (let c =0; c < columns; c++) {
+            let tile = document.getElementById(r.toString() + "-" + c.toString()); 
+            let num = board[r][c];
+            updateTile(tile,num)
+        }
+    }
+
+} 
+
+// if you reverse array, then slide Left, reverse it again
+// it's basically slide right
+function slideRight() {
+    for (let r=0; r < rows; r++) {
+        let row = board[r]; 
+        row.reverse();
+        row = slide(row);
+        row.reverse();
+        board[r] = row;
+
+        for (let c =0; c < columns; c++) {
+            let tile = document.getElementById(r.toString() + "-" + c.toString()); 
+            let num = board[r][c];
+            updateTile(tile,num)
+        }
+    }
+} 
