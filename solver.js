@@ -20,7 +20,7 @@ function startSolver() {
 
 function stopSolver() {
     solverRunning = false;
-    document.querySelector(".auto-button").innerText = "Auto Solve"; // Change button text
+    document.querySelector(".auto-button").innerText = "Auto-Solve"; // Change button text
 }
 
 

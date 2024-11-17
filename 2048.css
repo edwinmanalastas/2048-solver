@@ -39,7 +39,7 @@ hr {
     min-width: 100px; 
     margin-top: 10px;
     margin-bottom: 20px;
-    margin-right: 8rem;
+    margin-right: 7rem;
   }
   
   .score-box .score {
@@ -52,7 +52,7 @@ hr {
   .auto-button {
     background-color: #8f7a66; 
     color: white; 
-    font-size: 16px; 
+    font-size: 15px; 
     font-weight: bold; 
     text-align: center; 
     padding: 10px 20px;
@@ -182,4 +182,8 @@ hr {
     border: none;
     border-top: 1px solid #ac957f; /* Color of the horizontal line */
     margin: 10px 0; /* Space around the horizontal line */
+}
+
+@media(max-width: 860px) {
+    .score-box { margin-right: 6rem; }
 }
