@@ -95,8 +95,8 @@ function countEmptyTiles(board) {
 }
 
 function minimax(board, depth, isMaximizingPlayer, alpha, beta) {
-    if (depth == 0 || !hasEmptyTile()) {
-        return evaluateBoard(board);
+    if (depth === 0 || !hasEmptyTile() || !hasValidMoves(board)) {
+        return evaluateBoard(board); // Evaluate board at leaf node or terminal state
     }
 
     if (isMaximizingPlayer) {
@@ -106,11 +106,10 @@ function minimax(board, depth, isMaximizingPlayer, alpha, beta) {
             let eval = minimax(newBoard, depth - 1, false, alpha, beta);
             maxEval = Math.max(maxEval, eval);
             alpha = Math.max(alpha, eval);
-            if (beta <= alpha) break;
+            if (beta <= alpha) break; // Prune remaining branches
         }
         return maxEval;
     } else {
-        // Simulate the computer placing a random tile
         let minEval = Infinity;
         let possiblePlacements = getPossiblePlacements(board);
         for (let placement of possiblePlacements) {
@@ -118,11 +117,60 @@ function minimax(board, depth, isMaximizingPlayer, alpha, beta) {
             let eval = minimax(newBoard, depth - 1, true, alpha, beta);
             minEval = Math.min(minEval, eval);
             beta = Math.min(beta, eval);
-            if (beta <= alpha) break;
+            if (beta <= alpha) break; // Prune remaining branches
         }
         return minEval;
     }
 }
+
+function iterativeDeepening(board, maxDepth) {
+    let bestMove = null;
+    let maxEval = -Infinity;
+
+    for (let depth = 1; depth <= maxDepth; depth++) {
+        let currentBestMove = null;
+        let currentMaxEval = -Infinity;
+
+        for (let move of getPossibleMoves(board)) {
+            let newBoard = makeMove(board, move);
+            let eval = minimax(newBoard, depth, false, -Infinity, Infinity);
+            if (eval > currentMaxEval) {
+                currentMaxEval = eval;
+                currentBestMove = move;
+            }
+        }
+
+        // Update best move only if a better evaluation is found
+        if (currentMaxEval > maxEval) {
+            maxEval = currentMaxEval;
+            bestMove = currentBestMove;
+        }
+    }
+
+    return bestMove;
+}
+
+
+
+function calculateCornerScore(board) {
+    // Define a weight matrix that ensures the snake pattern
+    const weightMatrix = [
+        [15, 14, 13, 12],
+        [8, 9, 10, 11],
+        [7, 6, 5, 4], 
+        [0, 1, 2, 3],
+    ];
+
+    let score = 0;
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            // Add weight for higher values in the desired positions
+            score += board[r][c] * weightMatrix[r][c];
+        }
+    }
+    return score;
+}
+
 
 function canMove(board, direction) {
     if (direction === "left") {
@@ -219,28 +267,14 @@ function getPossiblePlacements(board) {
 
 function placeRandomTile(board, placement) {
     let newBoard = JSON.parse(JSON.stringify(board)); // Deep copy
-    newBoard[placement.r][placement.c] = Math.random() < 0.9 ? 2 : 4;
+    newBoard[placement.r][placement.c] = 2;
     return newBoard;
 }
-
 function autoPlay() {
-    if (!solverRunning) return;
+    if (!solverRunning) return; // Exit if the solver has been stopped
 
-    let depth = 3; // Higher depth
-    let bestMove = null;
-    let maxEval = -Infinity;
-
-    const moves = ["left", "down", "up", "right"]; // Prefer left and down first
-    for (let move of moves) {
-        if (canMove(board, move)) {
-            let newBoard = makeMove(board, move);
-            let eval = minimax(newBoard, depth, false, -Infinity, Infinity);
-            if (eval > maxEval) {
-                maxEval = eval;
-                bestMove = move;
-            }
-        }
-    }
+    let maxDepth = 5; // Adjustable based on performance
+    let bestMove = iterativeDeepening(board, maxDepth);
 
     if (bestMove) {
         if (bestMove == "left") slideLeft();
@@ -248,14 +282,17 @@ function autoPlay() {
         if (bestMove == "up") slideUp();
         if (bestMove == "down") slideDown();
         setTwoFour();
+
+        // Update Score
         document.getElementById("score").innerText = score;
+
         checkWin();
     }
 
     if (hasEmptyTile() || hasValidMoves(board)) {
-        setTimeout(autoPlay, 1);
+        setTimeout(autoPlay, 1); // Repeat after a delay
     } else {
-        stopSolver();
+        stopSolver(); // Stop the solver if no moves are left
         alert("No more valid moves! Solver stopped.");
     }
 }
