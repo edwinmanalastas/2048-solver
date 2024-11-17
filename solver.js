@@ -32,10 +32,19 @@ function evaluateBoard(board) {
     let monotonicity = calculateMonotonicity(board);
     let smoothness = calculateSmoothness(board);
     let emptyTiles = countEmptyTiles(board);
+    let cornerScore = calculateCornerScore(board); // New component for corner tiles
     
-    // Adjust weights as needed
-    return 0.8 * monotonicity + 0.5 * smoothness + 2 * emptyTiles;
+    return 1.0 * monotonicity + 0.5 * smoothness + 2.0 * emptyTiles + 1.5 * cornerScore;
 }
+
+function calculateCornerScore(board) {
+    const corners = [
+        board[0][0], board[0][columns - 1],
+        board[rows - 1][0], board[rows - 1][columns - 1]
+    ];
+    return Math.max(...corners); // Favor high-value tiles in corners
+}
+
 
 function calculateMonotonicity(board) {
     let score = 0;
@@ -156,6 +165,11 @@ function canMove(board, direction) {
     return false;
 }
 
+function hasValidMoves(board) {
+    return getPossibleMoves(board).length > 0;
+}
+
+
 
 function getPossibleMoves(board) {
     return ["left", "right", "up", "down"].filter(move => canMove(board, move));
@@ -163,12 +177,35 @@ function getPossibleMoves(board) {
 
 function makeMove(board, move) {
     let newBoard = JSON.parse(JSON.stringify(board)); // Deep copy
-    if (move == "left") slideLeft(newBoard);
-    if (move == "right") slideRight(newBoard);
-    if (move == "up") slideUp(newBoard);
-    if (move == "down") slideDown(newBoard);
+
+    if (move === "left") {
+        for (let r = 0; r < rows; r++) {
+            newBoard[r] = slide(newBoard[r]);
+        }
+    } else if (move === "right") {
+        for (let r = 0; r < rows; r++) {
+            newBoard[r] = slide(newBoard[r].reverse()).reverse();
+        }
+    } else if (move === "up") {
+        for (let c = 0; c < columns; c++) {
+            let col = [newBoard[0][c], newBoard[1][c], newBoard[2][c], newBoard[3][c]];
+            col = slide(col);
+            for (let r = 0; r < rows; r++) {
+                newBoard[r][c] = col[r];
+            }
+        }
+    } else if (move === "down") {
+        for (let c = 0; c < columns; c++) {
+            let col = [newBoard[0][c], newBoard[1][c], newBoard[2][c], newBoard[3][c]];
+            col = slide(col.reverse()).reverse();
+            for (let r = 0; r < rows; r++) {
+                newBoard[r][c] = col[r];
+            }
+        }
+    }
     return newBoard;
 }
+
 
 function getPossiblePlacements(board) {
     let placements = [];
@@ -187,18 +224,21 @@ function placeRandomTile(board, placement) {
 }
 
 function autoPlay() {
-    if (!solverRunning) return; // Exit if the solver has been stopped
+    if (!solverRunning) return;
 
-    let depth = 3; // Adjustable for performance
+    let depth = 3; // Higher depth
     let bestMove = null;
     let maxEval = -Infinity;
 
-    for (let move of getPossibleMoves(board)) {
-        let newBoard = makeMove(board, move);
-        let eval = minimax(newBoard, depth, false, -Infinity, Infinity);
-        if (eval > maxEval) {
-            maxEval = eval;
-            bestMove = move;
+    const moves = ["left", "down", "up", "right"]; // Prefer left and down first
+    for (let move of moves) {
+        if (canMove(board, move)) {
+            let newBoard = makeMove(board, move);
+            let eval = minimax(newBoard, depth, false, -Infinity, Infinity);
+            if (eval > maxEval) {
+                maxEval = eval;
+                bestMove = move;
+            }
         }
     }
 
@@ -208,15 +248,14 @@ function autoPlay() {
         if (bestMove == "up") slideUp();
         if (bestMove == "down") slideDown();
         setTwoFour();
-
-        // Update Score
         document.getElementById("score").innerText = score;
-
-        checkWin()
+        checkWin();
     }
-    if (hasEmptyTile()) {
-        setTimeout(autoPlay, 10); // Repeat after a delay
+
+    if (hasEmptyTile() || hasValidMoves(board)) {
+        setTimeout(autoPlay, 1);
     } else {
-        stopSolver(); // Stop the solver if no moves are left
+        stopSolver();
+        alert("No more valid moves! Solver stopped.");
     }
 }
