@@ -45,6 +45,8 @@ function setGame() {
 
     setTwoFour();
     setTwoFour();
+
+    console.log("Board After Initial Tiles:", board);
 }
 
 // Return false if board is full
@@ -115,28 +117,34 @@ function updateTile(tile, num) {
 
 // When you type something and let go (keyup)
 document.addEventListener("keyup", (e) => { //e is event
+    let moved = false;
+    let originalBoard = JSON.parse(JSON.stringify(board)); // Clone the board
+
     if (e.code == "ArrowLeft") {
         slideLeft();
-        setTwoFour();
     }
     else if (e.code == "ArrowRight") {
         slideRight();
-        setTwoFour();
     }
     else if (e.code == "ArrowUp") {
         slideUp();
-        setTwoFour();
     }
     else if (e.code == "ArrowDown") {
         slideDown();
-        setTwoFour();
     }
-    // Update Score
-    document.getElementById("score").innerText = score;
 
-    // Check for win condition
-    checkWin();
+    // Check if the board actually changed
+    if (isBoardChanged(originalBoard, board)) {
+        moved = true;
+    }
 
+    if (moved) {
+        setTwoFour(); // Generate a new tile only if the move was valid
+         // Update Score
+        document.getElementById("score").innerText = score;
+        // Check for win condition
+        checkWin();
+    }
 })
 
 function filterZero(row) {
@@ -146,6 +154,7 @@ function filterZero(row) {
 }
 
 function slide(row) {
+    
     // [0,2,2,2] example
     row = filterZero(row); // get rid of zeroes -> [2,2,2]
 
@@ -166,10 +175,14 @@ function slide(row) {
         row.push(0);
     } // [4,2] -> [4,2,0,0]
     return row;
+    
 }
 
 // iterate through each row
 function slideLeft() {
+    // const beforeSlide = JSON.parse(JSON.stringify(board));
+    // console.log("Before Slide Left:", beforeSlide);
+
     for (let r=0; r < rows; r++) {
         let row = board[r];
         // call slide function, modifies array
@@ -184,12 +197,13 @@ function slideLeft() {
             updateTile(tile,num)
         }
     }
-
+    console.log("After Slide Left:", board);
 } 
 
 // if you reverse array, then slide Left, reverse it again
 // it's basically slide right
 function slideRight() {
+
     for (let r=0; r < rows; r++) {
         let row = board[r]; 
         row.reverse();
@@ -203,6 +217,7 @@ function slideRight() {
             updateTile(tile,num)
         }
     }
+    console.log("After Slide Right:", board);
 }
 
 function slideUp() {
@@ -222,6 +237,7 @@ function slideUp() {
             updateTile(tile,num)
         }
     }
+    console.log("After Slide Up:", board);
 }
 
 // similar to slideRight, we reverse
@@ -244,7 +260,21 @@ function slideDown() {
             updateTile(tile,num)
         }
     }
+    console.log("After Slide Down:", board);
 }
+
+/* prevent tile generation when theres an invalid move */
+function isBoardChanged(originalBoard, newBoard) {
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            if (originalBoard[r][c] !== newBoard[r][c]) {
+                return true; // Board changed
+            }
+        }
+    }
+    return false; // No changes
+}
+
 
 function checkWin() {
     if (hasWon) return;
