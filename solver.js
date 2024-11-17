@@ -28,16 +28,10 @@ function evaluateBoard(board) {
     let smoothness = calculateSmoothness(board);
     let emptyTiles = countEmptyTiles(board);
     let cornerScore = calculateCornerScore(board);
+    let maxTile = Math.max(...board.flat());
+    let maxTileInTopLeft = board[0][0] === maxTile ? 1 : -1; 
     
-    return 1.0 * monotonicity + 0.5 * smoothness + 2.0 * emptyTiles + 1.5 * cornerScore;
-}
-
-function calculateCornerScore(board) {
-    const corners = [
-        board[0][0], board[0][columns - 1],
-        board[rows - 1][0], board[rows - 1][columns - 1]
-    ];
-    return Math.max(...corners); // Favor high-value tiles in corners
+    return (1.0 * monotonicity + 0.5 * smoothness + 2.0 * emptyTiles + 1.5 * cornerScore + 5.0 * maxTileInTopLeft);
 }
 
 function calculateMonotonicity(board) {
@@ -143,7 +137,6 @@ function iterativeDeepening(board, maxDepth) {
 
     return bestMove;
 }
-
 
 function calculateCornerScore(board) {
     // Define a weight matrix that ensures the snake pattern
