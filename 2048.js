@@ -348,6 +348,9 @@ function handleSwipe() {
     let deltaX = touchEndX - touchStartX; 
     let deltaY = touchEndY - touchStartY;
 
+    // Clone the board to compare later
+    let originalBoard = JSON.parse(JSON.stringify(board)); // Deep copy of the board
+
     // Determine if the swipe is primarily horizontal or vertical
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
         if (deltaX > 0) {
@@ -362,7 +365,15 @@ function handleSwipe() {
             slideUp();
         }
     }
-    setTwoFour();
-    document.getElementById("score").innerText = score;
-    checkWin();
+
+    // Check if the board state has changed
+    if (isBoardChanged(originalBoard, board)) {
+        setTwoFour(); // Generate a new tile only if a move occurred
+        document.getElementById("score").innerText = score;
+
+        // Check win condition only once
+        if (!hasWon) {
+            checkWin();
+        }
+    }
 }
