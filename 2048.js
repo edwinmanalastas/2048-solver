@@ -3,6 +3,11 @@ var score = 0;
 var rows = 4;
 var columns = 4;
 let hasWon = false
+/* swipe gestures */
+let touchStartX = 0; 
+let touchStartY = 0; 
+let touchEndX = 0;   
+let touchEndY = 0; 
 
 window.onload = function() {
     setGame();
@@ -283,4 +288,49 @@ function resetGame() {
     // Add two starting tiles
     setTwoFour();
     setTwoFour();
+}
+
+/* swipe gestures */
+// Add touchstart and touchend event listeners
+
+document.addEventListener("touchstart", function(e) {
+    // Get starting X and Y-coordinate
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", function(e) {
+    // Get ending X and Y-coordinate
+    touchEndX = e.changedTouches[0].clientX; 
+    touchEndY = e.changedTouches[0].clientY;
+    handleSwipe();
+});
+
+// Prevent scrolling during touchmove
+document.addEventListener("touchmove", function(e) {
+    e.preventDefault();
+}, { passive: false });
+
+function handleSwipe() {
+    // Calculate horizonta/vertical distance
+    let deltaX = touchEndX - touchStartX; 
+    let deltaY = touchEndY - touchStartY;
+
+    // Determine if the swipe is primarily horizontal or vertical
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX > 0) {
+            slideRight();
+        } else {
+            slideLeft();
+        }
+    } else {
+        if (deltaY > 0) {
+            slideDown();
+        } else {
+            slideUp();
+        }
+    }
+    setTwoFour();
+    document.getElementById("score").innerText = score;
+    checkWin();
 }
