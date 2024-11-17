@@ -281,6 +281,7 @@ function checkWin() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             if (board[r][c] == 2048) {
+                hasWon = true; 
                 // Display the pop-up
                 setTimeout(() => {
                     if (confirm("You won! Continue playing?")) {
@@ -299,6 +300,7 @@ function checkWin() {
 
 function resetGame() {
     score = 0;
+    hasWon=false;
     board = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],

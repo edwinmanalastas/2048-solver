@@ -215,7 +215,7 @@ function autoPlay() {
         checkWin()
     }
     if (hasEmptyTile()) {
-        setTimeout(autoPlay, 50); // Repeat after a delay
+        setTimeout(autoPlay, 10); // Repeat after a delay
     } else {
         stopSolver(); // Stop the solver if no moves are left
     }
