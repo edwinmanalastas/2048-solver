@@ -23,16 +23,11 @@ function stopSolver() {
     document.querySelector(".auto-button").innerText = "Auto-Solve"; // Change button text
 }
 
-
-function startAutoPlay() {
-    autoPlay();
-}
-
 function evaluateBoard(board) {
     let monotonicity = calculateMonotonicity(board);
     let smoothness = calculateSmoothness(board);
     let emptyTiles = countEmptyTiles(board);
-    let cornerScore = calculateCornerScore(board); // New component for corner tiles
+    let cornerScore = calculateCornerScore(board);
     
     return 1.0 * monotonicity + 0.5 * smoothness + 2.0 * emptyTiles + 1.5 * cornerScore;
 }
@@ -44,7 +39,6 @@ function calculateCornerScore(board) {
     ];
     return Math.max(...corners); // Favor high-value tiles in corners
 }
-
 
 function calculateMonotonicity(board) {
     let score = 0;
@@ -151,7 +145,6 @@ function iterativeDeepening(board, maxDepth) {
 }
 
 
-
 function calculateCornerScore(board) {
     // Define a weight matrix that ensures the snake pattern
     const weightMatrix = [
@@ -170,7 +163,6 @@ function calculateCornerScore(board) {
     }
     return score;
 }
-
 
 function canMove(board, direction) {
     if (direction === "left") {
@@ -216,8 +208,6 @@ function canMove(board, direction) {
 function hasValidMoves(board) {
     return getPossibleMoves(board).length > 0;
 }
-
-
 
 function getPossibleMoves(board) {
     return ["left", "right", "up", "down"].filter(move => canMove(board, move));
@@ -290,7 +280,7 @@ function autoPlay() {
     }
 
     if (hasEmptyTile() || hasValidMoves(board)) {
-        setTimeout(autoPlay, 1); // Repeat after a delay
+        setTimeout(autoPlay, 100); // Repeat after a delay
     } else {
         stopSolver(); // Stop the solver if no moves are left
         alert("No more valid moves! Solver stopped.");

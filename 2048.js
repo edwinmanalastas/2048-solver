@@ -287,6 +287,10 @@ function checkWin() {
         for (let c = 0; c < columns; c++) {
             if (board[r][c] == 2048) {
                 hasWon = true; 
+                // Stop the solver if it's running
+                if (solverRunning) {
+                    stopSolver();
+                }
                 // Display the pop-up
                 setTimeout(() => {
                     if (confirm("You won! Continue playing?")) {
@@ -304,6 +308,10 @@ function checkWin() {
 }
 
 function resetGame() {
+    if (solverRunning) {
+        stopSolver();
+    }
+
     score = 0;
     hasWon=false;
     board = [
@@ -326,6 +334,16 @@ function resetGame() {
     setTwoFour();
     setTwoFour();
 }
+
+// newGame button
+document.addEventListener("DOMContentLoaded", function() {
+    const newGameButton = document.querySelector(".newgame-button");
+    
+    newGameButton.addEventListener("click", function() {
+        resetGame();
+    });
+});
+
 
 /* swipe gestures */
 // Add touchstart and touchend event listeners
