@@ -1,4 +1,6 @@
 let solverRunning = false;
+let solverSpeed = 100;
+let solverInterval;
 
 document.addEventListener("DOMContentLoaded", function() {
     const autoButton = document.querySelector(".auto-button");
@@ -14,12 +16,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function startSolver() {
     solverRunning = true;
+    document.querySelector(".score-box").classList.add("hidden");
     document.querySelector(".auto-button").innerText = "Stop"; // Change button text
     autoPlay(); // Start the solver
 }
 
 function stopSolver() {
     solverRunning = false;
+    clearTimeout(solverInterval);
+    score = 0; // Reset the score to 0
+    document.getElementById("score").innerText = score; // Update the displayed score
+    document.querySelector(".score-box").classList.remove("hidden");
     document.querySelector(".auto-button").innerText = "Auto-Solve"; // Change button text
 }
 
@@ -29,9 +36,11 @@ function evaluateBoard(board) {
     let emptyTiles = countEmptyTiles(board);
     let cornerScore = calculateCornerScore(board);
     let maxTile = Math.max(...board.flat());
-    let maxTileInTopLeft = board[0][0] === maxTile ? 1 : -1; 
+    let maxTileInTopLeft = board[0][0] === maxTile ? 100 : -100; 
     
-    return (1.0 * monotonicity + 0.5 * smoothness + 2.0 * emptyTiles + 1.5 * cornerScore + 5.0 * maxTileInTopLeft);
+    return (1.0 * monotonicity + 0.5 * smoothness + 
+        2.0 * emptyTiles + 1.5 * cornerScore +
+        5.0 * maxTileInTopLeft);
 }
 
 function calculateMonotonicity(board) {
@@ -273,9 +282,9 @@ function autoPlay() {
     }
 
     if (hasEmptyTile() || hasValidMoves(board)) {
-        setTimeout(autoPlay, 100); // Repeat after a delay
+        solverInterval = setTimeout(autoPlay, solverSpeed); // Use the dynamic solverSpeed
     } else {
         stopSolver(); // Stop the solver if no moves are left
-        alert("No more valid moves! Solver stopped.");
+        alert("No more valid moves! Solver failed to solve.");
     }
 }
