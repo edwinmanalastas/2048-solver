@@ -39,7 +39,7 @@ function evaluateBoard(board) {
     let maxTileInTopLeft = board[0][0] === maxTile ? 100 : -100; 
     
     return (1.0 * monotonicity + 0.5 * smoothness + 
-        2.0 * emptyTiles + 1.5 * cornerScore +
+        2.0 * emptyTiles + 5.0 * cornerScore +
         5.0 * maxTileInTopLeft);
 }
 
@@ -265,7 +265,7 @@ function placeRandomTile(board, placement) {
 function autoPlay() {
     if (!solverRunning) return; // Exit if the solver has been stopped
 
-    let maxDepth = 5; // Adjustable based on performance
+    let maxDepth = 6; // Adjustable based on performance
     let bestMove = iterativeDeepening(board, maxDepth);
 
     if (bestMove) {
