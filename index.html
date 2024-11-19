@@ -24,6 +24,18 @@
             <button class="auto-button">Auto-Solve</button>
             <button class="newgame-button">New Game</button>
         </div>
+        <div id="slider-container">
+            <input
+                type="range"
+                id="speed-slider"
+                min="0"
+                max="1000"
+                value="100"
+                step="100"
+                style="margin-bottom: 20px; width: 20%;">
+            <label for="speed-slider">Solver Speed: <span id="speed-value">100</span> ms</label>
+        </div>
+        
     </div>
     <div id="board">
         <!-- <div class = "tile x2">2</div> -->

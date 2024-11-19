@@ -56,7 +56,9 @@ hr {
     font-weight: bold; 
     text-align: center; 
     padding: 10px 20px;
-    border: none; 
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 20px;
     border-radius: 8px;
     cursor: pointer; /* Pointer cursor on hover */
   }
@@ -130,9 +132,42 @@ hr {
     margin: 10px 0; /* Space around the horizontal line */
 }
 
+/* slider */
+
+label[for="speed-slider"] {
+    font-weight: bold;
+    font-size: 15px; 
+    color: #8f7a66; 
+}
+
+input[type="range"] {
+    appearance: none;
+    width: 20%;
+    height: 8px;
+    background: #8f7a66;
+    border-radius: 5px;
+    outline: none;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #ac957f;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
 @media(max-width: 860px) {
     .score-box { margin-right: 0rem; padding: 5px 10px;}
     .auto-button, .newgame-button { font-size: 10px; padding: 5px 10px;}
+    .auto-button:hover, .newgame-button:hover {background-color: #8f7a66; cursor:default }
 
     hr { width: 300px; }
     .header { padding-top: 10px; }

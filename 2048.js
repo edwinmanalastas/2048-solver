@@ -400,3 +400,27 @@ function handleSwipe() {
         }
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const speedSlider = document.getElementById("speed-slider");
+    const speedValueDisplay = document.getElementById("speed-value");
+
+    // Update solverSpeed when slider changes
+    speedSlider.addEventListener("input", function () {
+        solverSpeed = parseInt(speedSlider.value, 10); // Convert value to an integer (base 10)
+        speedValueDisplay.innerText = `${solverSpeed}`; // Update displayed speed
+    });
+});
+
+//Disable slider if on mobile device
+function isMobileDevice() {
+    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+}
+
+window.onload = function () {
+    setGame();
+    if (isMobileDevice()) {
+        const sliderContainer = document.getElementById("slider-container");
+        sliderContainer.classList.add("hidden");
+    }
+};
