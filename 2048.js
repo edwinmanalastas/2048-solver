@@ -46,7 +46,7 @@ function setGame() {
     setTwoFour();
     setTwoFour();
 
-    console.log("Board After Initial Tiles:", board);
+    // console.log("Board After Initial Tiles:", board);
 }
 
 // Return false if board is full
@@ -202,7 +202,7 @@ function slideLeft() {
             updateTile(tile,num)
         }
     }
-    console.log("After Slide Left:", board);
+    // console.log("After Slide Left:", board);
 } 
 
 // if you reverse array, then slide Left, reverse it again
@@ -222,7 +222,7 @@ function slideRight() {
             updateTile(tile,num)
         }
     }
-    console.log("After Slide Right:", board);
+    // console.log("After Slide Right:", board);
 }
 
 function slideUp() {
@@ -242,7 +242,7 @@ function slideUp() {
             updateTile(tile,num)
         }
     }
-    console.log("After Slide Up:", board);
+    //console.log("After Slide Up:", board);
 }
 
 // similar to slideRight, we reverse
@@ -265,7 +265,7 @@ function slideDown() {
             updateTile(tile,num)
         }
     }
-    console.log("After Slide Down:", board);
+    // console.log("After Slide Down:", board);
 }
 
 /* prevent tile generation when theres an invalid move */
