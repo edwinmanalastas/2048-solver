@@ -80,16 +80,18 @@ function setTwoFour() {
         // if empty
         if (board[r][c] == 0) {
             // Determine whether to place a 2 or a 4 (90% chance for 2, 10% for 4)
-            // let num = Math.random() < 0.9 ? 2 : 4; // 90% chance for 2
-            // board[r][c] = num;
+
+            //let num = Math.random() < 0.9 ? 2 : 4; // 90% chance for 2
+            //board[r][c] = num;
             
-            board[r][c] = 2; // Always spawn a 2
+            board[r][c] = 2; // Always spawn a 2 (for now)
 
             // Update the HTML
             let tile = document.getElementById(r.toString() + "-" + c.toString());
             tile.innerText = "2";
             tile.classList.add("x2");
-
+            
+            // 90% chance for 2, 4 otherwise
             //tile.innerText = num.toString();
             //tile.classList.add("x" + num.toString());
             found = true;
