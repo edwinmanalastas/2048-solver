@@ -38,10 +38,15 @@ function evaluateBoard(board) {
     let maxTile = Math.max(...board.flat());
     let maxTileInTopLeft = board[0][0] === maxTile ? 100 : -100; 
     
-    return (1.0 * monotonicity + 0.5 * smoothness + 
-        2.0 * emptyTiles + 5.0 * cornerScore +
-        5.0 * maxTileInTopLeft);
+    return (
+        1 * monotonicity + 
+        0.5 * smoothness + 
+        5 * emptyTiles + 
+        3 * cornerScore +
+        3 * maxTileInTopLeft
+    );
 }
+
 
 function calculateMonotonicity(board) {
     let score = 0;
@@ -270,15 +275,16 @@ function autoPlay() {
     let bestMove = iterativeDeepening(board, maxDepth);
 
     if (bestMove) {
-        let originalBoard = JSON.parse(JSON.stringify(board)); // Save the current board state
+        let originalBoard = JSON.parse(JSON.stringify(board));
 
         if (bestMove == "left") slideLeft();
         if (bestMove == "right") slideRight();
         if (bestMove == "up") slideUp();
         if (bestMove == "down") slideDown();
 
+        // if move occured
         if (isBoardChanged(originalBoard, board)) {
-            setTwoFour(); // Generate a new tile only if a move occurred
+            setTwoFour(); 
 
             // Update Score
             document.getElementById("score").innerText = score;
