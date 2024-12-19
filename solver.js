@@ -262,6 +262,7 @@ function placeRandomTile(board, placement) {
     newBoard[placement.r][placement.c] = 2;
     return newBoard;
 }
+
 function autoPlay() {
     if (!solverRunning) return; // Exit if the solver has been stopped
 
@@ -269,17 +270,22 @@ function autoPlay() {
     let bestMove = iterativeDeepening(board, maxDepth);
 
     if (bestMove) {
+        let originalBoard = JSON.parse(JSON.stringify(board)); // Save the current board state
+
         if (bestMove == "left") slideLeft();
         if (bestMove == "right") slideRight();
         if (bestMove == "up") slideUp();
         if (bestMove == "down") slideDown();
-        setTwoFour();
 
-        // Update Score
-        document.getElementById("score").innerText = score;
+        if (isBoardChanged(originalBoard, board)) {
+            setTwoFour(); // Generate a new tile only if a move occurred
 
-        checkWin();
+            // Update Score
+            document.getElementById("score").innerText = score;
+            checkWin();
+        }
     }
+    
 
     if (hasEmptyTile() || hasValidMoves(board)) {
         solverInterval = setTimeout(autoPlay, solverSpeed); // Use the dynamic solverSpeed
